@@ -19,8 +19,13 @@ Start-BitsTransfer -Source $sophosUrl -Destination $destinationPath
 
 Write-Host "Sophos Connect 2.3.2 has been downloaded to $destinationPath"
 
-# Kill any running instances of msiexec.exe
-Stop-Process -Name "msiexec" -Force
+# Try to kill any running instances of msiexec.exe, proceed if not found
+try {
+    Stop-Process -Name "msiexec" -Force
+    Write-Host "Stopped any running instances of msiexec.exe."
+} catch {
+    Write-Host "msiexec.exe process not found, proceeding with installation."
+}
 
 # Install the MSI file silently
 Start-Process msiexec.exe -ArgumentList "/i `"$destinationPath`" /quiet /norestart ALLUSERS=1 /log `"$env:TEMP\SC_Log_.txt`"" -NoNewWindow -Wait
