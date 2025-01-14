@@ -14,5 +14,10 @@ Start-BitsTransfer -Source $sophosUrl -Destination $destinationPath
 
 Write-Host "Sophos Connect 2.3.2 has been downloaded to $destinationPath"
 
-taskkill /f /im msiexec.exe
-msiexec /i "C:\Temp\SophosConnect.msi" /quiet /norestart ALLUSERS=1 /log "C:\temp\SC_Log_.txt"
+# Kill any running instances of msiexec.exe
+Stop-Process -Name "msiexec" -Force
+
+# Install the MSI file silently
+Start-Process msiexec.exe -ArgumentList "/i `"$destinationPath`" /quiet /norestart ALLUSERS=1 /log `"$env:TEMP\SC_Log_.txt`"" -NoNewWindow -Wait
+
+Write-Host "Sophos Connect 2.3.2 installation completed."
