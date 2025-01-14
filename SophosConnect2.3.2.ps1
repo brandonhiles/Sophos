@@ -9,6 +9,11 @@ if (!(Test-Path -Path "C:\Temp")) {
     New-Item -ItemType Directory -Path "C:\Temp" -Force
 }
 
+# Check if the file exists and delete it if it does
+if (Test-Path -Path $destinationPath) {
+    Remove-Item -Path $destinationPath -Force
+}
+
 # Download the file using BITS transfer
 Start-BitsTransfer -Source $sophosUrl -Destination $destinationPath
 
